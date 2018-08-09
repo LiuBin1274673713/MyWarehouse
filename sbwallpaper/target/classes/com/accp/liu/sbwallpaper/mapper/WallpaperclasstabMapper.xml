@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.accp.liu.sbwallpaper.mapper.WallpaperclasstabMapper" >
+  <resultMap id="BaseResultMap" type="com.accp.liu.sbwallpaper.entity.Wallpaperclasstab" >
+    <id column="wallpaperclassid" property="wallpaperclassid" jdbcType="INTEGER" />
+    <result column="wallpaperclassname" property="wallpaperclassname" jdbcType="VARCHAR" />
+    <association property="wallpapertab" resultMap="com.accp.liu.sbwallpaper.mapper.WallpapertabMapper.BaseResultMap"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wallpaperclassid, wallpaperclassname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wallpaperclasstab
+    where wallpaperclassid = #{wallpaperclassid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    SELECT * FROM `wallpaperclasstab`
+	LEFT JOIN `wallpapertab` USING(`wallpaperclassid`)
+	GROUP BY wallpaperclassid
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wallpaperclasstab
+    where wallpaperclassid = #{wallpaperclassid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.accp.liu.sbwallpaper.entity.Wallpaperclasstab" >
+    insert into wallpaperclasstab (wallpaperclassid, wallpaperclassname
+      )
+    values (#{wallpaperclassid,jdbcType=INTEGER}, #{wallpaperclassname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.accp.liu.sbwallpaper.entity.Wallpaperclasstab" >
+    insert into wallpaperclasstab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wallpaperclassid != null" >
+        wallpaperclassid,
+      </if>
+      <if test="wallpaperclassname != null" >
+        wallpaperclassname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wallpaperclassid != null" >
+        #{wallpaperclassid,jdbcType=INTEGER},
+      </if>
+      <if test="wallpaperclassname != null" >
+        #{wallpaperclassname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.accp.liu.sbwallpaper.entity.Wallpaperclasstab" >
+    update wallpaperclasstab
+    <set >
+      <if test="wallpaperclassname != null" >
+        wallpaperclassname = #{wallpaperclassname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where wallpaperclassid = #{wallpaperclassid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.accp.liu.sbwallpaper.entity.Wallpaperclasstab" >
+    update wallpaperclasstab
+    set wallpaperclassname = #{wallpaperclassname,jdbcType=VARCHAR}
+    where wallpaperclassid = #{wallpaperclassid,jdbcType=INTEGER}
+  </update>
+</mapper>

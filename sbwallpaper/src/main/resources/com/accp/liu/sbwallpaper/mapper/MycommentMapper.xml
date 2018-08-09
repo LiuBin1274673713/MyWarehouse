@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.accp.liu.sbwallpaper.mapper.MycommentMapper" >
+  <resultMap id="BaseResultMap" type="com.accp.liu.sbwallpaper.entity.Mycomment" >
+    <id column="mycommentid" property="mycommentid" jdbcType="INTEGER" />
+    <result column="wallpaperid" property="wallpaperid" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="VARCHAR" />
+    <result column="commentdate" property="commentdate" jdbcType="TIMESTAMP" />
+    <result column="commenttext" property="commenttext" jdbcType="LONGVARCHAR" />
+    <association property="user" resultMap="com.accp.liu.sbwallpaper.mapper.UsertabMapper.BaseResultMap"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    mycommentid, wallpaperid, userid, commentdate,commenttext
+  </sql>
+  <select id="selectWallpaperComment" resultMap="BaseResultMap">
+    select 
+    *
+    from mycomment
+    join usertab using(userid)
+    where wallpaperid = #{wallpaperid,jdbcType=INTEGER}
+    order by commentdate desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    *
+    from mycomment
+    join usertab using(userid)
+    where mycommentid = #{mycommentid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mycomment
+    where mycommentid = #{mycommentid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.accp.liu.sbwallpaper.entity.Mycomment" useGeneratedKeys="true" keyProperty="mycommentid">
+    insert into mycomment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mycommentid != null" >
+        mycommentid,
+      </if>
+      <if test="wallpaperid != null" >
+        wallpaperid,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="commentdate != null" >
+        commentdate,
+      </if>
+      <if test="commenttext != null" >
+        commenttext,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mycommentid != null" >
+        #{mycommentid,jdbcType=INTEGER},
+      </if>
+      <if test="wallpaperid != null" >
+        #{wallpaperid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="commentdate != null" >
+        #{commentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commenttext != null" >
+        #{commenttext,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.accp.liu.sbwallpaper.entity.Mycomment" >
+    update mycomment
+    <set >
+      <if test="wallpaperid != null" >
+        wallpaperid = #{wallpaperid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="commentdate != null" >
+        commentdate = #{commentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commenttext != null" >
+        commenttext = #{commenttext,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mycommentid = #{mycommentid,jdbcType=INTEGER}
+  </update>
+</mapper>

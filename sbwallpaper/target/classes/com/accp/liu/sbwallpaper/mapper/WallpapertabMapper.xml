@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.accp.liu.sbwallpaper.mapper.WallpapertabMapper">
+	<resultMap id="BaseResultMap"
+		type="com.accp.liu.sbwallpaper.entity.Wallpapertab">
+		<id column="wallpaperid" property="wallpaperid" jdbcType="INTEGER" />
+		<result column="wallpapername" property="wallpapername"
+			jdbcType="VARCHAR" />
+		<result column="uploaduser" property="uploaduser"
+			jdbcType="VARCHAR" />
+		<result column="downloadsum" property="downloadsum"
+			jdbcType="INTEGER" />
+		<result column="wallpaperclassid" property="wallpaperclassid"
+			jdbcType="INTEGER" />
+		<result column="wallpaperprice" property="wallpaperprice"
+			jdbcType="DOUBLE" />
+		<result column="uploaddate" property="uploaddate"
+			jdbcType="TIMESTAMP" />
+		<result column="wallpaperurl" property="wallpaperurl"
+			jdbcType="VARCHAR" />
+		<association property="usertab"
+			resultMap="com.accp.liu.sbwallpaper.mapper.UsertabMapper.BaseResultMap" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		wallpaperid, wallpapername, uploaduser, downloadsum, wallpaperclassid,
+		wallpaperprice,
+		uploaddate, wallpaperurl
+	</sql>
+	<select id="selectClassAll" resultMap="BaseResultMap">
+		SELECT * FROM wallpapertab wb
+		JOIN usertab ub ON wb.uploaduser=ub.userid
+		WHERE wallpaperclassid=#{wallpaperclassid}
+	</select>
+
+	<select id="selectRecommend" resultMap="BaseResultMap">
+		SELECT * FROM wallpapertab wb
+		JOIN usertab ub ON wb.uploaduser=ub.userid
+		ORDER BY downloadsum DESC
+		LIMIT 6
+	</select>
+	<select id="selectTop" resultMap="BaseResultMap">
+		SELECT * FROM wallpapertab
+		JOIN usertab ON uploaduser=userid
+		where 1
+		<if test="type==1">
+			and wallpaperprice>0
+		</if>
+		<if test="type==2">
+			and wallpaperprice=0
+		</if>
+		order by downloadsum desc
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		*
+		from wallpapertab wb
+		JOIN usertab ub ON wb.uploaduser=ub.userid
+		where wallpaperid = #{wallpaperid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from wallpapertab
+		where wallpaperid = #{wallpaperid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.accp.liu.sbwallpaper.entity.Wallpapertab">
+		insert into wallpapertab (wallpaperid, wallpapername, uploaduser,
+		downloadsum, wallpaperclassid, wallpaperprice,
+		uploaddate, wallpaperurl)
+		values (#{wallpaperid,jdbcType=INTEGER}, #{wallpapername,jdbcType=VARCHAR},
+		#{uploaduser,jdbcType=VARCHAR},
+		#{downloadsum,jdbcType=INTEGER}, #{wallpaperclassid,jdbcType=INTEGER},
+		#{wallpaperprice,jdbcType=DOUBLE},
+		#{uploaddate,jdbcType=TIMESTAMP}, #{wallpaperurl,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.accp.liu.sbwallpaper.entity.Wallpapertab">
+		insert into wallpapertab
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="wallpaperid != null">
+				wallpaperid,
+			</if>
+			<if test="wallpapername != null">
+				wallpapername,
+			</if>
+			<if test="uploaduser != null">
+				uploaduser,
+			</if>
+			<if test="downloadsum != null">
+				downloadsum,
+			</if>
+			<if test="wallpaperclassid != null">
+				wallpaperclassid,
+			</if>
+			<if test="wallpaperprice != null">
+				wallpaperprice,
+			</if>
+			<if test="uploaddate != null">
+				uploaddate,
+			</if>
+			<if test="wallpaperurl != null">
+				wallpaperurl,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="wallpaperid != null">
+				#{wallpaperid,jdbcType=INTEGER},
+			</if>
+			<if test="wallpapername != null">
+				#{wallpapername,jdbcType=VARCHAR},
+			</if>
+			<if test="uploaduser != null">
+				#{uploaduser,jdbcType=VARCHAR},
+			</if>
+			<if test="downloadsum != null">
+				#{downloadsum,jdbcType=INTEGER},
+			</if>
+			<if test="wallpaperclassid != null">
+				#{wallpaperclassid,jdbcType=INTEGER},
+			</if>
+			<if test="wallpaperprice != null">
+				#{wallpaperprice,jdbcType=DOUBLE},
+			</if>
+			<if test="uploaddate != null">
+				#{uploaddate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="wallpaperurl != null">
+				#{wallpaperurl,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.accp.liu.sbwallpaper.entity.Wallpapertab">
+		update wallpapertab
+		<set>
+			<if test="wallpapername != null">
+				wallpapername = #{wallpapername,jdbcType=VARCHAR},
+			</if>
+			<if test="uploaduser != null">
+				uploaduser = #{uploaduser,jdbcType=VARCHAR},
+			</if>
+			<if test="downloadsum != null">
+				downloadsum = #{downloadsum,jdbcType=INTEGER},
+			</if>
+			<if test="wallpaperclassid != null">
+				wallpaperclassid = #{wallpaperclassid,jdbcType=INTEGER},
+			</if>
+			<if test="wallpaperprice != null">
+				wallpaperprice = #{wallpaperprice,jdbcType=DOUBLE},
+			</if>
+			<if test="uploaddate != null">
+				uploaddate = #{uploaddate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="wallpaperurl != null">
+				wallpaperurl = #{wallpaperurl,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where wallpaperid = #{wallpaperid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.accp.liu.sbwallpaper.entity.Wallpapertab">
+		update wallpapertab
+		set wallpapername = #{wallpapername,jdbcType=VARCHAR},
+		uploaduser = #{uploaduser,jdbcType=VARCHAR},
+		downloadsum = #{downloadsum,jdbcType=INTEGER},
+		wallpaperclassid = #{wallpaperclassid,jdbcType=INTEGER},
+		wallpaperprice = #{wallpaperprice,jdbcType=DOUBLE},
+		uploaddate = #{uploaddate,jdbcType=TIMESTAMP},
+		wallpaperurl = #{wallpaperurl,jdbcType=VARCHAR}
+		where wallpaperid = #{wallpaperid,jdbcType=INTEGER}
+	</update>
+</mapper>
